@@ -1,0 +1,38 @@
+name: release
+
+on: 
+  release: 
+    types: [created]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install gbs
+      run: |
+        echo "deb [trusted=yes] http://download.tizen.org/tools/latest-release/Ubuntu_18.04/ /" | sudo tee /etc/apt/sources.list.d/tizen.list
+        sudo apt update
+        sudo apt install -y gbs mic librpm-tizen
+        sudo /usr/sbin/update-binfmts --disable
+        sudo systemctl disable binfmt-support.service
+    - name: Run Binary Build
+      run: |
+        gbs createimage --ks-file=tizen-unified_iot-headless-armv7l-rpi3_custom.ks       
+    - name : Install ghr
+      run: |
+        export GOPATH=${HOME}/go 
+        mkdir -p ${GOPATH}
+        go get -v -u github.com/tcnksm/ghr
+    - name : Upload release
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        export GOPATH=${HOME}/go 
+        export GOPATH_BIN=${GOPATH}/bin
+        echo "user : ${GITHUB_REPOSITORY%/*}"
+        echo "repo : ${GITHUB_REPOSITORY#*/}"
+        echo "tag : ${GITHUB_REF#refs/tags/}"
+        $GOPATH_BIN/ghr -t "${GITHUB_TOKEN}" -u "${GITHUB_REPOSITORY%/*}" -r "${GITHUB_REPOSITORY#*/}" "${GITHUB_REF#refs/tags/}" "./mic-output/"

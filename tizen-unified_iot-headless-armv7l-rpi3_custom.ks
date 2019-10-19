@@ -63,13 +63,17 @@ stability-monitor-kmod-rpi3
 system-plugin-config-env-headless
 # Others
 building-blocks-sub2-Preset_boards-RPI3-Camera_Headless
+building-blocks-sub2-Preset_boards-RPI3-Codec
+building-blocks-sub2-domain_API-Content-MIME_Type
 building-blocks-sub2-domain_API-Multimedia-libEXIF
 building-blocks-sub2-domain_API-Multimedia-Image_Util
 building-blocks-sub2-domain_API-Multimedia-Media_Vision_Face
 building-blocks-sub2-domain_API-Multimedia-Media_Vision_Image
 building-blocks-sub2-domain_API-Multimedia-Media_Vision_Surveillance
 building-blocks-sub2-domain_API-Multimedia-Media_Vision_Inference
-
+inference-engine-tflite
+inference-engine-opencv
+libwebsockets
 
 %end
 
